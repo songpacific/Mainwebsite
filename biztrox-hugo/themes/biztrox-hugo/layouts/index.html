@@ -1,0 +1,208 @@
+{{ define "main" }}
+
+{{ if .Params.slider.enable }}
+<section>
+	<div class="hero-slider position-relative">
+		<!-- slider item -->
+		{{ range .Params.slider.slider_item }}
+		<div class="hero-slider-item py-160" style="background-image: url('{{ .bg_image | absURL }}')" data-icon="{{ .pagination_icon }}" data-text="{{ .pagination_name }}">
+			<div class="container">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="hero-content">
+							<h4 class="text-uppercase mb-1" data-duration-in=".5" data-animation-in="fadeIn{{.animation_from | humanize}}" data-delay-in=".1">
+								{{ .subtitle | markdownify }}</h4>
+							<h1 class="font-weight-bold mb-3" data-duration-in=".5" data-animation-in="fadeIn{{.animation_from | humanize}}" data-delay-in=".4">
+								{{ .title | markdownify }}</h1>
+							<p class="text-dark mb-50" data-duration-in=".5" data-animation-in="fadeIn{{.animation_from | humanize}}" data-delay-in=".7">
+								{{ .content | markdownify }}
+							</p>
+							{{ if .button.enable }}
+							<a data-duration-in=".5" data-animation-in="fadeIn{{.animation_from | humanize}}" data-delay-in="1"
+								href="{{ .button.link | relLangURL }}" class="btn btn-outline text-uppercase">{{ .button.label }}</a>
+							{{ end }}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		{{ end }}
+	</div>
+</section>
+{{ end }}
+
+{{ $service:= .Params.service }}
+{{ if $service.enable }}
+<!-- service -->
+<section class="section">
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-lg-12 text-center">
+				<h5 class="section-title-sm">{{ $service.subtitle | markdownify }}</h5>
+				<h2 class="section-title section-title-border">{{ $service.title | markdownify }}</h2>
+			</div>
+			{{ range $index, $element:= where site.RegularPages "Section" $service.section }}
+			{{ if lt $index 3 }}
+			{{ .Render "service" }}
+			{{ end }}
+			{{ end }}
+		</div>
+	</div>
+</section>
+<!-- /service -->
+{{ end }}
+
+{{ if .Params.about.enable }}
+{{ "<!-- about -->" | safeHTML }}
+{{ with .Params.about }}
+<section class="about section-sm overlay" style="background-image: url('{{ .bg_image | absURL }}');">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-6 ml-auto">
+				<div class="rounded p-sm-5 px-3 py-5 bg-secondary">
+					<h3 class="section-title section-title-border-half text-white">{{ .title | markdownify }}</h3>
+					<p class="text-white mb-40">{{ .content | markdownify }}</p>
+					<ul class="list-unstyled" style="columns: 2;">
+						{{ range .bullet_point }}
+						<li class="font-secondary mb-10 text-white"><i class="text-primary mr-2 ti-arrow-circle-right"></i>{{ . }}</li>
+						{{ end }}
+					</ul>
+					{{ if .button.enable }}
+					{{ with .button }}
+					<a href="{{ .link | relLangURL }}" class="btn btn-primary mt-4">{{ .label }}</a>
+					{{ end }}
+					{{ end }}
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+{{ end }}
+{{ "<!-- /about -->" | safeHTML }}
+{{ end }}
+
+{{ if .Params.skill.enable }}
+{{ partial "skill.html" . }}
+{{ end }}
+
+{{ $project:= .Params.project }}
+{{ if $project.enable }}
+<!-- work -->
+<section class="section bg-gray">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-lg-12 text-center">
+				<h5 class="section-title-sm">{{ $project.title | markdownify }}</h5>
+				<h2 class="section-title section-title-border-gray">{{ $project.subtitle | markdownify }}</h2>
+			</div>
+		</div>
+		<!-- work slider -->
+		<div class="row work-slider">
+			{{ range $index, $element:= where site.RegularPages "Type" $project.section }}
+			{{ .Render "project" }}
+			{{ end }}
+		</div>
+	</div>
+</section>
+{{ end }}
+<!-- /work -->
+
+{{ if .Params.mission.enable }}
+{{ partial "mission.html" . }}
+{{ end }}
+
+{{ with .Params.promo_video }}
+{{ if .enable }}
+{{ "<!-- promo-video -->" | safeHTML }}
+<section class="promo-video overlay section"
+	style="background-image: url('{{ .bg_image | absURL }}');">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<h1 class="text-white mb-20 font-weight-normal">{{ .title |safeHTML }}</h1>
+				<div class="d-flex">
+					<a class="popup-youtube play-icon mr-4" href="{{ .video_URL | safeURL }}"><i class="ti-control-play"></i></a>
+					<p class="text-white align-self-center h4">{{ .video_title | markdownify }}</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+{{ "<!-- /promo-video -->" | safeHTML }}
+{{ end }}
+{{ end }}
+
+{{ if .Params.testimonial.enable }}
+{{ partial "testimonial.html" . }}
+{{ end }}
+
+{{ with .Params.call_to_action }}
+{{ if .enable }}
+{{ "<!-- cta -->" | safeHTML }}
+<section class="cta overlay-primary py-50 text-center text-lg-left"
+	style="background-image: url('{{ .bg_image | absURL }}');">
+	<div class="container">
+		<div class="row justify-content-between">
+			<div class="col-lg-6">
+				<h3 class="text-white">{{ .title | markdownify }}</h3>
+			</div>
+			<div class="col-lg-6 text-lg-right align-self-center">
+				{{ if .button.enable }}
+				{{ with .button }}
+				<a href="{{ .link | relLangURL }}" class="btn btn-light text-uppercase">{{ .label }}</a>
+				{{ end }}
+				{{ end }}
+			</div>
+		</div>
+	</div>
+</section>
+{{ "<!-- /cta -->" | safeHTML }}
+{{ end }}
+{{ end }}
+
+{{ $blog:= .Params.blog }}
+{{ if $blog.enable }}
+<!-- blog -->
+<section class="section bg-gray">
+	<div class="container">
+		<div class="row justify-content-center">
+			<div class="col-lg-12 text-center">
+				<h5 class="section-title-sm">{{ $blog.subtitle | markdownify }}</h5>
+				<h2 class="section-title section-title-border-gray">{{ $blog.title | markdownify }}</h2>
+			</div>
+
+			{{ range $index, $element:= where site.RegularPages "Section" $blog.section }}
+			{{ if lt $index 3}}
+			<!-- blog-item -->
+			<div class="col-lg-4 col-sm-6 mb-4">
+				{{ .Render "post" }}
+			</div>
+			{{ end }}
+			{{ end }}
+		</div>
+	</div>
+</section>
+{{ end }}
+<!-- /blog -->
+
+{{ with .Params.clients_logo_slider }}
+{{ if .enable }}
+{{ "<!-- client logo slider -->" | safeHTML}}
+<section class="bg-white py-4">
+	<div class="container">
+		<div class="client-logo-slider align-self-center">
+			{{ range .client_logos }}
+			{{ if and ( ne .link "" ) ( ne .link "#" ) }}
+			<a href="{{ .link | safeURL }}" target="_blank" class="text-center d-block outline-0 py-3 px-2"><img class="d-unset" src="{{ .logo | absURL }}" alt="client-logo"></a>
+			{{ else }}
+			<span class="text-center d-block outline-0 py-3 px-2"><img class="d-unset" src="{{ .logo | absURL }}" alt="client-logo"></span>
+			{{ end }}
+			{{ end }}
+		</div>
+	</div>
+</section>
+{{ "<!-- /client logo slider -->" | safeHTML}}
+{{ end }}
+{{ end }}
+
+{{ end }}

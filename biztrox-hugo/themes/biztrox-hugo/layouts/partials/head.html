@@ -1,0 +1,26 @@
+<head>
+  <meta charset="utf-8">
+  <title>{{ .Title }}</title>
+
+  <!-- mobile responsive meta -->
+  <meta name="description"
+    content="{{ with .Description }}{{ . }}{{ else }}{{ with site.Params.description }}{{ . }}{{ end }}{{ end }}">
+  <!-- multilingual SEO optimizations -->
+  {{ if .IsTranslated }}
+  {{ range .Page.AllTranslations }}
+  <link rel="alternate" hreflang="{{ .Lang }}" href="{{ .Permalink }}">
+  {{ end }}
+  {{ end }}
+
+  <meta name="theme-name" content="biztrox-hugo" />
+
+  {{ with .Params.image }}
+  <meta property="og:image" content="{{ . | absURL }}" />
+  {{ end }}
+  {{ template "_internal/opengraph.html" . }}
+  {{ template "_internal/google_analytics_async.html" . }}
+  {{ site.Params.custom_script | safeHTML }}
+
+  {{ partialCached "style.html" . }}
+
+</head>

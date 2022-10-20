@@ -1,0 +1,24 @@
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+{{ with site.Params.author }}
+<meta name="author" content="{{ . }}">{{ end }}
+{{ hugo.Generator }}
+
+<!--Favicon-->
+<link rel="shortcut icon" href="{{ site.Params.favicon | absURL }}" type="image/x-icon">
+<link rel="icon" href="{{ site.Params.favicon | absURL }}" type="image/x-icon">
+
+<!-- plugins -->
+<link rel="preconnect" href="https://fonts.gstatic.com">
+{{ range site.Params.plugins.css}}
+<link rel="stylesheet" href="{{ .link | absURL }}" {{.attributes | safeHTMLAttr}}>
+{{ end }}
+
+<!-- Main Stylesheet -->
+{{ $styles := resources.Get "scss/style.scss" | toCSS | minify }}
+<link rel="stylesheet" as="style" href="{{ $styles.Permalink }}" media="screen" >
+
+<!-- Custom stylesheet - for your changes -->
+{{ if fileExists "scss/custom.scss" }}
+{{ $custom := resources.Get "scss/custom.scss" | minify }}
+<link rel="stylesheet" href="{{ $custom.Permalink }}" media="screen">
+{{ end }}
